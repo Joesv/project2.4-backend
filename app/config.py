@@ -38,9 +38,9 @@ class Config:
     CSRF_SESSION_KEY = getenv('CSRF_SESSION_KEY', 'secret')  # TODO: secret key for signing data
 
     # secret key for signing cookies
-    SECRET_KEY = getenv('SECRET_KEY', 'VerySecret')
+    SECRET_KEY = getenv('SECRET_KEY')
 
     # Key for API JWT tokens
-    JWT_SECRET_KEY = 'TOPSECRET'
+    JWT_SECRET_KEY = getenv('JWT_SECRET_KEY')
     JWT_ACCESS_TOKEN_EXPIRES = timedelta(minutes=30)
     JWT_REFRESH_TOKEN_EXPIRES = timedelta(days=1)

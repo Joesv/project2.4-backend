@@ -9,22 +9,22 @@ class User(DBModel):
     __tablename__ = "user"
 
     id = Column(Integer, autoincrement=True, nullable=False, primary_key=True)
-    user_name = Column(VARCHAR(45), nullable=False, unique=True)
-    #email = Column(VARCHAR(45), nullable=False, unique=True)
-    #password = Column(BINARY(60), nullable=False)
-    #created_date = Column(DateTime, default=datetime.datetime.utcnow)
-    user_age = Column(Integer, default=None)
+    username = Column(VARCHAR(45), nullable=False, unique=True)
+    email = Column(VARCHAR(45), nullable=False, unique=True)
+    password = Column(BINARY(60), nullable=False)
+    created_date = Column(DateTime, default=datetime.datetime.utcnow)
+    #user_age = Column(Integer, default=None)
 
     def to_dict(self):
         return dict(
             id=self.id,
-            user_name=self.user_name,
-            #email=self.email,
-            #password=self.password,
-            #created_date=self.created_date
-            user_age=self.user_age
+            username=self.username,
+            email=self.email,
+            password=self.password,
+            created_date=self.created_date
+            #user_age=self.user_age
         )
-        
+'''        
 class Game(DBModel):
 
     __tablename__ = "game"
@@ -69,3 +69,4 @@ class UserGame(DBModel):
             game_id=self.game_id,
             user_id=self.user_id,
         )
+'''

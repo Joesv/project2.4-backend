@@ -2,7 +2,8 @@ from datetime import datetime, date
 import click
 
 from database.db_model import DBModel
-from database.tables import User, Game, TopScore, UserGame
+from database.tables import User#, Game, TopScore, UserGame
+
 
 def user_data(app):
     click.echo("Adding user data...")
@@ -22,7 +23,8 @@ def user_data(app):
     )
     app.session.flush()
     app.session.commit()
-    
+
+'''
 def game_data(app):
     click.echo("Adding game data...")
     app.session.add(
@@ -46,6 +48,7 @@ def game_data(app):
     app.session.flush()
     app.session.commit()
 
+
 def topscore_data(app):
     click.echo("Adding score data...")
     app.session.add(
@@ -65,6 +68,7 @@ def topscore_data(app):
     app.session.flush()
     app.session.commit()
 
+
 def usergame_data(app):
     click.echo("Adding usergame data...")
     app.session.add(
@@ -80,8 +84,9 @@ def usergame_data(app):
         )
     )
     app.session.flush()
-    app.session.commit()    
-    
+    app.session.commit()
+'''
+
 def setup_db(app, cache):
     try:
         if (app.session.query(User).first() is not None):
@@ -96,7 +101,7 @@ def setup_db(app, cache):
         # create a new database and add new data
         DBModel.metadata.create_all(bind=app.engine)
 
-        user_data(app)
-        game_data(app)
-        topscore_data(app)
-        usergame_data(app)
+        #user_data(app)
+        #game_data(app)
+        #topscore_data(app)
+        #usergame_data(app)
