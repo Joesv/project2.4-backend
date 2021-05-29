@@ -70,6 +70,7 @@ def post_register():
         response = jsonify()
         response.status_code = 200
         response.headers['location'] = '/login'
+        response.autocorrect_location_header = False
         return response
 
     new_user = User(email=data['email'],
