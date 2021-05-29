@@ -42,6 +42,8 @@ def post_login():
             access_token = create_access_token(identity=user['email'])
             response = jsonify(access_token=access_token)
             response.headers['location'] = '/home'
+            response.autocorrect_location_header = False
+            response.headers.add('Access-Control-Allow-Origin', '*')
             return response, 201
         else:
             print("PASSWORD INCORRECT")
@@ -68,6 +70,7 @@ def post_register():
         response = jsonify()
         response.status_code = 200
         response.headers['location'] = '/login'
+        response.autocorrect_location_header = False
         return response
 
     new_user = User(email=data['email'],
@@ -80,4 +83,5 @@ def post_register():
     access_token = create_access_token(identity=data['email'])
     response = jsonify(access_token=access_token)
     response.headers['location'] = '/home'
-    return response
+    response.autocorrect_location_header = False
+    return response, 201
