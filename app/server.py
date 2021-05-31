@@ -32,7 +32,6 @@ def get_login():
 
 @post('/login')
 def post_login():
-    print("komt hier")
     data = request.json
     email = app.session.query(User).filter_by(email=data['email']).first()
     if email:
@@ -46,11 +45,9 @@ def post_login():
             response.headers.add('Access-Control-Allow-Origin', '*')
             return response, 201
         else:
-            print("PASSWORD INCORRECT")
-            return 'password incorrect', 400
+            return jsonify(error="password incorrect"), 401
     else:
-        print("USER DOES NOT EXIST")
-        return 'no user', 400
+        return jsonify(error="user does not exist"), 401
 
 
 @get('/register')
@@ -68,7 +65,7 @@ def post_register():
     if user or email:
         # redirect to signin
         response = jsonify()
-        response.status_code = 200
+        response.status_code = 301
         response.headers['location'] = '/login'
         response.autocorrect_location_header = False
         return response
