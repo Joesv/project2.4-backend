@@ -24,6 +24,27 @@ class User(DBModel):
             created_date=self.created_date
             #user_age=self.user_age
         )
+
+
+class Device(DBModel):
+
+    __tablename__ = "device"
+
+    id = Column(Integer, autoincrement=True, nullable=False, primary_key=True)
+    name = Column(VARCHAR(32), nullable=False)
+    description = Column(VARCHAR(128), nullable=False, unique=True)
+    ws_protocol = Column(VARCHAR(3), nullable=False)
+    ws_address = Column(VARCHAR(64), nullable=False)
+
+    def to_dict(self):
+        return dict(
+            id=self.id,
+            name=self.name,
+            description=self.description,
+            ws_protocol=self.ws_protocol,
+            ws_address=self.ws_address
+        )
+
 '''        
 class Game(DBModel):
 
