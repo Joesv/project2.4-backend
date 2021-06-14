@@ -10,7 +10,7 @@ from app import db
 from app.config import Config
 from app.utils import init_routing_func, check_request_data
 from app.obj_utils import get_objs
-from database.tables import User  # , Game, TopScore, UserGame
+from database.tables import User, Device  # , Game, TopScore, UserGame
 import bcrypt
 
 # memory_api, get, post = init_routing_func('memory_api', '/wmsdemoflask/')
@@ -82,3 +82,21 @@ def post_register():
     response.headers['location'] = '/home'
     response.autocorrect_location_header = False
     return response, 201
+
+
+device, get, post = init_routing_func('device', '/api/device/')
+
+
+@post('/new')
+def post_device():
+    data = request.json
+
+    new_device = Device(name=data['name'],
+                        description=data['description'],
+                        ws_protocol=data['ws_protocol'],
+                        ws_address=data['ws_address'])
+    app.session.add(new_device)
+    app.session.flush()
+    app.session.commit()
+
+    return jsonify(), 200
