@@ -91,12 +91,14 @@ device, get, post = init_routing_func('device', '/api/device/')
 def post_device():
     data = request.json
 
-    new_device = Device(name=data['name'],
-                        description=data['description'],
-                        ws_protocol=data['ws_protocol'],
-                        ws_address=data['ws_address'])
+    new_device = Device(name = data['name'],
+                        # user_id = ???, TODO
+                        description = data['description'],
+                        control_type = data['control_type'],
+                        control_url = data['control_url'],
+                        fetch_url = data['fetch_url'])
     app.session.add(new_device)
     app.session.flush()
     app.session.commit()
 
-    return jsonify(), 200
+    return jsonify(), 201
