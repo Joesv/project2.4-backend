@@ -84,7 +84,10 @@ def post_register():
     return response, 201
 
 
-@post('/device')
+device, get, post = init_routing_func('device', '/api/device/')
+
+
+@post('/new')
 def post_device():
     data = request.json
 
@@ -96,4 +99,4 @@ def post_device():
     app.session.flush()
     app.session.commit()
 
-    return 200
+    return jsonify(), 200
