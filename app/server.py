@@ -10,6 +10,7 @@ from app import db
 from app.config import Config
 from app.utils import init_routing_func, check_request_data
 from app.obj_utils import get_objs
+from app.weather import Weather
 from database.tables import User, Device  # , Game, TopScore, UserGame
 import bcrypt
 
@@ -100,3 +101,10 @@ def post_device():
     app.session.commit()
 
     return jsonify(), 200
+
+@get('/weather')
+def get_weather():
+    #get these from the db
+    lat = 53.21917
+    lon = 56667
+    return Weather.get_weather_by_coords(lat, lon)
