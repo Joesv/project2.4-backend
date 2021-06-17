@@ -13,7 +13,7 @@ class Weather:
         if not Config.ENABLEWEATHERAPI:
             return json.loads(Weather.default)
 
-        url = f'{Weather.oneCallBaseUrl}lat={lat}&lon={lon}&appid={Weather.apiKey}'
+        url = f'{Weather.oneCallBaseUrl}lat={lat}&lon={lon}&units=metric&appid={Weather.apiKey}'
         resp = requests.get(url)
         # print(resp.json())
         return resp.json()
