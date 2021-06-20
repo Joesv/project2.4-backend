@@ -44,3 +44,7 @@ class Config:
     JWT_SECRET_KEY = getenv('JWT_SECRET_KEY')
     JWT_ACCESS_TOKEN_EXPIRES = timedelta(minutes=30)
     JWT_REFRESH_TOKEN_EXPIRES = timedelta(days=1)
+
+    # Openweather api key and wether or not to fetch the data
+    OPENWEATHERAPIKEY = getenv('OPENWEATHERMAP_API')
+    ENABLEWEATHERAPI = getenv('ENABLEWEATHERAPI') == 'true'  # we're using expensive API calls, in case autoreload is enabled you might reach your limit
