@@ -106,5 +106,5 @@ def post_device():
 def get_weather():
     #get these from the db
     lat = 53.21917
-    lon = 56667
+    lon = 5.6667
     return Weather.get_weather_by_coords(lat, lon)
