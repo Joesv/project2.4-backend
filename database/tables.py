@@ -14,7 +14,7 @@ class User(DBModel):
     password = Column(BINARY(60), nullable=False)
     created_date = Column(DateTime, default=datetime.datetime.utcnow)
 
-    # devices = relationship('Device', backref='user', lazy=True) TODO
+    devices = relationship('Device', backref='user', lazy=True)
 
     def to_dict(self):
         return dict(
@@ -22,7 +22,8 @@ class User(DBModel):
             username=self.username,
             email=self.email,
             password=self.password,
-            created_date=self.created_date
+            created_date=self.created_date,
+            devices=self.devices
         )
 
 
@@ -31,7 +32,7 @@ class Device(DBModel):
     __tablename__ = "device"
 
     id = Column(Integer, autoincrement=True, nullable=False, primary_key=True)
-    # user_id = Column(Integer, ForeignKey('user.id'), nullable=False) TODO
+    user_id = Column(Integer, ForeignKey('user.id'), nullable=False)
     name = Column(VARCHAR(32), nullable=False)
     description = Column(VARCHAR(128), nullable=False)
     control_type = Column(VARCHAR(32), nullable=False)
@@ -41,6 +42,7 @@ class Device(DBModel):
     def to_dict(self):
         return dict(
             id=self.id,
+            user_id=self.user_id,
             name=self.name,
             description=self.description,
             control_type=self.control_type,
