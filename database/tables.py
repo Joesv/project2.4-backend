@@ -13,7 +13,8 @@ class User(DBModel):
     email = Column(VARCHAR(45), nullable=False, unique=True)
     password = Column(BINARY(60), nullable=False)
     created_date = Column(DateTime, default=datetime.datetime.utcnow)
-    #user_age = Column(Integer, default=None)
+
+    lamp_devices = relationship('LampDevice', backref='user', lazy=True)
 
     def to_dict(self):
         return dict(
@@ -21,28 +22,31 @@ class User(DBModel):
             username=self.username,
             email=self.email,
             password=self.password,
-            created_date=self.created_date
-            #user_age=self.user_age
+            created_date=self.created_date,
+
+            lamp_devices=self.lamp_devices
         )
 
 
-class Device(DBModel):
+class LampDevice(DBModel):
 
-    __tablename__ = "device"
+    __tablename__ = "lamp_device"
 
     id = Column(Integer, autoincrement=True, nullable=False, primary_key=True)
+    user_id = Column(Integer, ForeignKey('user.id'), nullable=False)
     name = Column(VARCHAR(32), nullable=False)
-    description = Column(VARCHAR(128), nullable=False, unique=True)
-    ws_protocol = Column(VARCHAR(3), nullable=False)
-    ws_address = Column(VARCHAR(64), nullable=False)
+    description = Column(VARCHAR(128), nullable=False)
+    on_url = Column(VARCHAR(128), nullable=False)
+    off_url = Column(VARCHAR(128), nullable=False)
 
     def to_dict(self):
         return dict(
             id=self.id,
+            user_id=self.user_id,
             name=self.name,
             description=self.description,
-            ws_protocol=self.ws_protocol,
-            ws_address=self.ws_address
+            on_url=self.on_url,
+            off_url=self.off_url
         )
 
 '''        
