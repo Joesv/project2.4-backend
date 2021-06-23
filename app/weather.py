@@ -1,8 +1,10 @@
+import datetime
+
 import requests
 import json
 from app import app
 from app.config import Config
-
+from database.tables import WeatherCache
 
 class Weather:
     apiKey = Config.OPENWEATHERAPIKEY
@@ -10,15 +12,34 @@ class Weather:
     oneCallBaseUrl = 'https://api.openweathermap.org/data/2.5/onecall?'
     units = 'metric'
 
-    def get_weather_by_coords(lat, lon):
+    def normalize(self, number):
+        return round(number, 1)
+
+    def get_weather_by_coords(self, lat, lon):
         if not Config.ENABLEWEATHERAPI:
             return json.loads(Weather.default)
 
-        url = f'{Weather.oneCallBaseUrl}lat={lat}&lon={lon}&units={Weather.units}&appid={Weather.apiKey}'
-        resp = requests.get(url)
-        # print(resp.json())
-        return resp.json()
+        lat = self.normalize(lat)
+        lon = self.normalize(lon)
 
+        cache = app.session.query(WeatherCache).filter(
+            WeatherCache.lat == lat,
+            WeatherCache.lon == lon,
+            WeatherCache.timestamp >= datetime.datetime.utcnow() - datetime.timedelta(minutes=15)
+        ).order_by('desc').limit(1)
+
+        if cache is None:
+            url = f'{self.oneCallBaseUrl}lat={lat}&lon={lon}&units={self.units}&appid={self.apiKey}'
+            resp = requests.get(url)
+            # print(resp.json())
+            new_cache = WeatherCache(lat=lat, lon=lon, data=resp.json())
+            app.session.new(new_cache)
+            app.session.flush()
+            app.session.commit()
+
+            return resp.json()
+
+        return cache.data
 
     default = """
     {

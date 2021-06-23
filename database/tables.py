@@ -1,4 +1,4 @@
-from sqlalchemy import Column, Integer, ForeignKey, VARCHAR, CHAR, BINARY, TIMESTAMP, DateTime
+from sqlalchemy import Column, Integer, ForeignKey, VARCHAR, CHAR, BINARY, TIMESTAMP, DateTime, Float, JSON
 from sqlalchemy.orm import relationship
 from database.db_model import DBModel
 import datetime
@@ -47,6 +47,26 @@ class LampDevice(DBModel):
             description=self.description,
             on_url=self.on_url,
             off_url=self.off_url
+        )
+
+
+class WeatherCache(DBModel):
+
+    __tablename__ = "weather_cache"
+
+    id = Column(Integer, autoincrement=True, nullable=False, primary_key=True)
+    lon = Column(Float)
+    lat = Column(Float)
+    data = Column(JSON)
+    timestamp = Column(DateTime, default=datetime.datetime.utcnow())
+
+    def to_dict(self):
+        return dict(
+            id=self.id,
+            lon=self.lon,
+            lat=self.lat,
+            data=self.data,
+            timestamp=self.timestamp
         )
 
 '''        
