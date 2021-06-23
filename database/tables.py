@@ -1,4 +1,4 @@
-from sqlalchemy import Column, Integer, ForeignKey, VARCHAR, CHAR, BINARY, TIMESTAMP, DateTime, Float, JSON
+from sqlalchemy import Column, Integer, ForeignKey, VARCHAR, CHAR, BINARY, TIMESTAMP, DateTime, Float, JSON, DECIMAL
 from sqlalchemy.orm import relationship
 from database.db_model import DBModel
 import datetime
@@ -55,8 +55,8 @@ class WeatherCache(DBModel):
     __tablename__ = "weather_cache"
 
     id = Column(Integer, autoincrement=True, nullable=False, primary_key=True)
-    lon = Column(Float)
-    lat = Column(Float)
+    lon = Column(CHAR(5))
+    lat = Column(CHAR(5))
     data = Column(JSON)
     timestamp = Column(DateTime, default=datetime.datetime.utcnow())
 

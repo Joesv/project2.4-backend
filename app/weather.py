@@ -5,6 +5,8 @@ import json
 from app import app
 from app.config import Config
 from database.tables import WeatherCache
+from sqlalchemy import desc
+
 
 class Weather:
     apiKey = Config.OPENWEATHERAPIKEY
@@ -19,26 +21,29 @@ class Weather:
         if not Config.ENABLEWEATHERAPI:
             return json.loads(Weather.default)
 
-        lat = self.normalize(lat)
-        lon = self.normalize(lon)
+        lat = str(self.normalize(lat))
+        lon = str(self.normalize(lon))
 
+        deltaT = datetime.datetime.utcnow() - datetime.timedelta(minutes=15)
         cache = app.session.query(WeatherCache).filter(
             WeatherCache.lat == lat,
             WeatherCache.lon == lon,
-            WeatherCache.timestamp >= datetime.datetime.utcnow() - datetime.timedelta(minutes=15)
-        ).order_by('desc').limit(1)
+            WeatherCache.timestamp >= deltaT
+        ).first()
 
         if cache is None:
+            print("not hitting the cache")
             url = f'{self.oneCallBaseUrl}lat={lat}&lon={lon}&units={self.units}&appid={self.apiKey}'
             resp = requests.get(url)
             # print(resp.json())
-            new_cache = WeatherCache(lat=lat, lon=lon, data=resp.json())
-            app.session.new(new_cache)
+            json = resp.json()
+            new_cache = WeatherCache(lat=lat, lon=lon, data=json)
+            app.session.add(new_cache)
             app.session.flush()
             app.session.commit()
 
             return resp.json()
-
+        print("hitting the cache")
         return cache.data
 
     default = """
