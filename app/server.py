@@ -10,6 +10,7 @@ from app import db
 from app.config import Config
 from app.utils import init_routing_func, check_request_data
 from app.obj_utils import get_objs
+from app.weather import Weather
 from database.tables import User, LampDevice  # , Game, TopScore, UserGame
 import bcrypt
 
@@ -87,6 +88,7 @@ def post_register():
 
 lamp_device, get, post, put, delete = init_routing_func('device', '/api/lamp_device')
 
+
 @post('/')
 def post_lamp_device():
     verify_jwt_in_request()
@@ -117,3 +119,14 @@ def get_lamp_devices():
     lamps = app.session.query(LampDevice).filter(LampDevice.user_id == user_id).all()
 
     return jsonify(lamps=[l.to_dict() for l in lamps]), 200
+
+
+device, get, post, put, delete = init_routing_func('device', '/api/device')
+
+
+@get('/weather')
+def get_weather():
+    #get these from the db
+    lat = 53.21917
+    lon = 5.6667
+    return Weather.get_weather_by_coords(lat, lon)
