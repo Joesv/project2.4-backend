@@ -1,7 +1,7 @@
 from flask import Flask, request, jsonify
 from flask_jwt_extended import (
     JWTManager, jwt_required, create_access_token, create_refresh_token,
-    get_jwt_identity, get_jwt
+    get_jwt_identity, get_jwt, verify_jwt_in_request
 )
 from datetime import datetime, timedelta, timezone
 
@@ -10,7 +10,7 @@ from app import db
 from app.config import Config
 from app.utils import init_routing_func, check_request_data
 from app.obj_utils import get_objs
-from database.tables import User, Device  # , Game, TopScore, UserGame
+from database.tables import User, LampDevice  # , Game, TopScore, UserGame
 import bcrypt
 
 # memory_api, get, post = init_routing_func('memory_api', '/wmsdemoflask/')
@@ -22,7 +22,7 @@ def getGames():
     return jsonify(games), 200
 '''
 
-user, get, post = init_routing_func('user', '/api/user/')
+user, get, post, put, delete = init_routing_func('user', '/api/user/')
 
 
 @get('/login')
@@ -33,12 +33,10 @@ def get_login():
 @post('/login')
 def post_login():
     data = request.json
-    email = app.session.query(User).filter_by(email=data['email']).first()
-    if email:
-        user = email.__dict__
-        storedHash = user['password']
-        if bcrypt.checkpw(data['password'].encode('utf8'), storedHash):
-            access_token = create_access_token(identity=user['email'])
+    loggedin_user = app.session.query(User).filter_by(email=data['email']).first()
+    if loggedin_user:
+        if bcrypt.checkpw(data['password'].encode('utf8'), loggedin_user.password):
+            access_token = create_access_token(identity=loggedin_user.id)
             response = jsonify(access_token=access_token)
             response.headers['location'] = '/home'
             response.autocorrect_location_header = False
@@ -77,28 +75,45 @@ def post_register():
     app.session.flush()
     app.session.commit()
 
-    access_token = create_access_token(identity=data['email'])
+    user_id = new_user.id
+    print(f"Registered user id is {user_id}")
+
+    access_token = create_access_token(identity=user_id)
     response = jsonify(access_token=access_token)
     response.headers['location'] = '/home'
     response.autocorrect_location_header = False
     return response, 201
 
 
-device, get, post = init_routing_func('device', '/api/device/')
+lamp_device, get, post, put, delete = init_routing_func('device', '/api/lamp_device')
 
-
-@post('/new')
-def post_device():
+@post('/')
+def post_lamp_device():
+    verify_jwt_in_request()
     data = request.json
 
-    new_device = Device(name = data['name'],
-                        # user_id = ???, TODO
-                        description = data['description'],
-                        control_type = data['control_type'],
-                        control_url = data['control_url'],
-                        fetch_url = data['fetch_url'])
-    app.session.add(new_device)
+    # user = app.session.query(User).filter(User.id == get_jwt_identity()).first()
+    user_id = get_jwt_identity()
+
+    new_lamp = LampDevice(name=data['name'],
+                          user_id=user_id,
+                          description=data['description'],
+                          on_url=data['on_url'],
+                          off_url=data['off_url'])
+    app.session.add(new_lamp)
     app.session.flush()
     app.session.commit()
 
     return jsonify(), 201
+
+
+@get('/')
+def get_lamp_devices():
+    verify_jwt_in_request()
+
+    user_id = get_jwt_identity()
+    # user = app.session.query(User).filter(User.id == user_id).first()
+    # lamps = user.lamp_devices.all()
+    lamps = app.session.query(LampDevice).filter(LampDevice.user_id == user_id).all()
+
+    return jsonify(lamps=[l.to_dict() for l in lamps]), 200

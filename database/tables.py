@@ -14,7 +14,7 @@ class User(DBModel):
     password = Column(BINARY(60), nullable=False)
     created_date = Column(DateTime, default=datetime.datetime.utcnow)
 
-    devices = relationship('Device', backref='user', lazy=True)
+    lamp_devices = relationship('LampDevice', backref='user', lazy=True)
 
     def to_dict(self):
         return dict(
@@ -23,21 +23,21 @@ class User(DBModel):
             email=self.email,
             password=self.password,
             created_date=self.created_date,
-            devices=self.devices
+
+            lamp_devices=self.lamp_devices
         )
 
 
-class Device(DBModel):
+class LampDevice(DBModel):
 
-    __tablename__ = "device"
+    __tablename__ = "lamp_device"
 
     id = Column(Integer, autoincrement=True, nullable=False, primary_key=True)
     user_id = Column(Integer, ForeignKey('user.id'), nullable=False)
     name = Column(VARCHAR(32), nullable=False)
     description = Column(VARCHAR(128), nullable=False)
-    control_type = Column(VARCHAR(32), nullable=False)
-    control_url = Column(VARCHAR(64), nullable=False)
-    fetch_url = Column(VARCHAR(64), nullable=False)
+    on_url = Column(VARCHAR(128), nullable=False)
+    off_url = Column(VARCHAR(128), nullable=False)
 
     def to_dict(self):
         return dict(
@@ -45,9 +45,8 @@ class Device(DBModel):
             user_id=self.user_id,
             name=self.name,
             description=self.description,
-            control_type=self.control_type,
-            control_url=self.control_url,
-            fetch_url=self.fetch_url
+            on_url=self.on_url,
+            off_url=self.off_url
         )
 
 '''        
