@@ -86,7 +86,7 @@ def post_register():
     return response, 201
 
 
-lamp_device, get, post, put, delete = init_routing_func('device', '/api/lamp_device')
+lamp_device, get, post, put, delete = init_routing_func('lamp_device', '/api/lamp_device/')
 
 
 @post('/')
@@ -121,7 +121,7 @@ def get_lamp_devices():
     return jsonify(lamps=[l.to_dict() for l in lamps]), 200
 
 
-device, get, post, put, delete = init_routing_func('device', '/api/device')
+device, get, post, put, delete = init_routing_func('device', '/api/device/')
 
 
 @get('/weather')
