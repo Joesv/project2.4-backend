@@ -6,7 +6,9 @@ device, get, post, put, delete = init_routing_func('device', '/api/device/')
 
 @get('/weather')
 def get_weather():
-    #get these from the db
+    # get these from the db
+
     lat = 53.21917
     lon = 5.6667
-    return Weather.get_weather_by_coords(lat, lon)
+    weather = Weather()
+    return weather.get_weather_by_coords(lat, lon)
