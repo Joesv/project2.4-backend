@@ -38,6 +38,7 @@ class LampDevice(DBModel):
     description = Column(VARCHAR(128), nullable=False)
     on_url = Column(VARCHAR(128), nullable=False)
     off_url = Column(VARCHAR(128), nullable=False)
+    last_status = Column(VARCHAR(1), nullable=False, default='0')
 
     def to_dict(self):
         return dict(
@@ -46,7 +47,8 @@ class LampDevice(DBModel):
             name=self.name,
             description=self.description,
             on_url=self.on_url,
-            off_url=self.off_url
+            off_url=self.off_url,
+            last_status=self.last_status
         )
 
 
