@@ -28,11 +28,9 @@ class Weather:
             WeatherCache.timestamp >= deltaT
         ).order_by(desc(WeatherCache.timestamp)).first()
 
-        if cache is None:
-            print("not hitting the cache")
+        if cache is None: # cache doesnt return anything
             url = f'{self.oneCallBaseUrl}lat={lat}&lon={lon}&units={self.units}&appid={self.apiKey}'
             resp = requests.get(url)
-            # print(resp.json())
             json = resp.json()
             new_cache = WeatherCache(lat=lat, lon=lon, data=json)
             app.session.add(new_cache)
@@ -40,5 +38,5 @@ class Weather:
             app.session.commit()
 
             return resp.json()
-        print("hitting the cache")
+        # return from cache
         return cache.data
