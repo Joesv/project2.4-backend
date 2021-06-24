@@ -38,6 +38,7 @@ class LampDevice(DBModel):
     description = Column(VARCHAR(128), nullable=False)
     on_url = Column(VARCHAR(128), nullable=False)
     off_url = Column(VARCHAR(128), nullable=False)
+    last_status = Column(VARCHAR(1), nullable=False, default='0')
 
     def to_dict(self):
         return dict(
@@ -46,7 +47,8 @@ class LampDevice(DBModel):
             name=self.name,
             description=self.description,
             on_url=self.on_url,
-            off_url=self.off_url
+            off_url=self.off_url,
+            last_status=self.last_status
         )
 
 
@@ -68,50 +70,3 @@ class WeatherCache(DBModel):
             data=self.data,
             timestamp=self.timestamp
         )
-
-'''        
-class Game(DBModel):
-
-    __tablename__ = "game"
-
-    id = Column(Integer, autoincrement=True, nullable=False, primary_key=True)
-    game_name = Column(VARCHAR(45), nullable=False, unique=True)
-    topscores = relationship("TopScore")
-
-    def to_dict(self):
-        return dict(
-            id=self.id,
-            game_name=self.game_name,
-            topscores=[dict(user=ts.user_id,score=ts.score) for ts in self.topscores]
-        )
-        
-class TopScore(DBModel):
-
-    __tablename__ = "topscore"
-
-    id = Column(Integer, autoincrement=True, nullable=False, primary_key=True)
-    game_id = Column(ForeignKey(Game.id), nullable=False)
-    user_id = Column(ForeignKey(User.id), nullable=False)
-    score = Column(Integer, nullable=False)
-
-    def to_dict(self):
-        return dict(
-            id=self.id,
-            game_id=self.game_id,
-            user_id=self.user_id,
-            score = self.score
-        )
-        
-class UserGame(DBModel):
-    
-    __tablename__ = "user_game"
-    
-    game_id = Column(ForeignKey(Game.id), primary_key=True, nullable=False)
-    user_id = Column(ForeignKey(User.id), primary_key=True, nullable=False)
-    
-    def to_dict(self):
-        return dict(
-            game_id=self.game_id,
-            user_id=self.user_id,
-        )
-'''
