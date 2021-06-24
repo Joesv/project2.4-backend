@@ -11,7 +11,7 @@ from app.config import Config
 from app.utils import init_routing_func, check_request_data
 from app.obj_utils import get_objs
 from app.weather import Weather
-from database.tables import User, LampDevice  # , Game, TopScore, UserGame
+from database.tables import User, LampDevice, DummyDevice  # , Game, TopScore, UserGame
 import bcrypt
 
 # memory_api, get, post = init_routing_func('memory_api', '/wmsdemoflask/')
@@ -119,6 +119,39 @@ def get_lamp_devices():
     lamps = app.session.query(LampDevice).filter(LampDevice.user_id == user_id).all()
 
     return jsonify(lamps=[l.to_dict() for l in lamps]), 200
+
+dummy_device, get, post, put, delete = init_routing_func('dummy_device', '/api/dummy_device/')
+
+
+@post('/')
+def post_dummy_device():
+    #print("hello")
+    verify_jwt_in_request()
+    data = request.json
+
+    # user = app.session.query(User).filter(User.id == get_jwt_identity()).first()
+    user_id = get_jwt_identity()
+
+    new_device = DummyDevice(dummy_id=1,
+                          name=data['name'],
+                          user_id=user_id,
+                          description=data['description'],
+                          value=1)
+    app.session.add(new_device)
+    app.session.flush()
+    app.session.commit()
+
+    return jsonify(), 201
+
+@get('/')
+def get_dummy_devices():
+    verify_jwt_in_request()
+
+    user_id = get_jwt_identity()
+    dummys = app.session.query(DummyDevice).filter(DummyDevice.user_id == user_id).all()
+
+    return jsonify(dummys=[d.to_dict() for d in dummys]), 200
+
 
 
 device, get, post, put, delete = init_routing_func('device', '/api/device/')

@@ -49,6 +49,30 @@ class LampDevice(DBModel):
             off_url=self.off_url
         )
 
+
+
+class DummyDevice(DBModel):
+
+    __tablename__ = "Dummy_Device"
+
+    id = Column(Integer, autoincrement=True, nullable=False, primary_key=True)
+    user_id = Column(Integer, ForeignKey('user.id'), nullable=False)
+    dummy_id = Column(Integer, ForeignKey('user.id'), nullable=False)
+    name = Column(VARCHAR(32), nullable=False)
+    description = Column(VARCHAR(128), nullable=False)
+    value = Column(Integer, nullable=True)
+
+
+    def to_dict(self):
+        return dict(
+            id=self.id,
+            user_id=self.user_id,
+            dummy_id=self.dummy_id,
+            name=self.name,
+            description=self.description,
+            value=self.value
+        )
+
 '''        
 class Game(DBModel):
 
