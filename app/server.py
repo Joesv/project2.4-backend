@@ -8,14 +8,16 @@ from datetime import datetime, timedelta, timezone
 from app import app
 from app import db
 from app.config import Config
-from app.utils import init_routing_func, check_request_data
+from app.utils import init_routing_func,  check_request_data
 from app.obj_utils import get_objs
 from app.weather import Weather
 from database.tables import User, LampDevice  # , Game, TopScore, UserGame
 import bcrypt
 
-# memory_api, get, post = init_routing_func('memory_api', '/wmsdemoflask/')
 
+
+
+# memory_api, get, post = init_routing_func('memory_api', '/wmsdemoflask/')
 '''
 @get('/getgames')
 def getGames():
@@ -126,7 +128,9 @@ device, get, post, put, delete = init_routing_func('device', '/api/device/')
 
 @get('/weather')
 def get_weather():
-    #get these from the db
+    # get these from the db
+
     lat = 53.21917
     lon = 5.6667
-    return Weather.get_weather_by_coords(lat, lon)
+    weather = Weather()
+    return weather.get_weather_by_coords(lat, lon)

@@ -1,4 +1,3 @@
-from datetime import datetime, date
 import click
 
 from database.db_model import DBModel

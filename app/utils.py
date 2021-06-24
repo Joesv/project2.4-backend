@@ -1,5 +1,5 @@
 from functools import partial
-from flask import json, jsonify
+from flask import jsonify
 
 from app.authorization import AuthBlueprint
 
@@ -23,3 +23,4 @@ def check_request_data(data, items):
                 message =  jsonify({'error':'no ' + item + ' provided'})
                 response_code = 400
     return message, response_code
+
