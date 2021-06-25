@@ -52,6 +52,25 @@ class LampDevice(DBModel):
         )
 
 
+class WeatherCard(DBModel):
+    __tablename__ = "weather_card"
+
+    id = Column(Integer, autoincrement=True, nullable=False, primary_key=True)
+    user_id = Column(Integer, ForeignKey('user.id'), nullable=False)
+    name = Column(VARCHAR(32))
+    lat = Column(Float)
+    lon = Column(Float)
+
+    def to_dict(self):
+        return dict(
+            id=self.id,
+            user_id=self.user_id,
+            name=self.name,
+            lat=self.lat,
+            lon=self.lon
+        )
+
+
 class WeatherCache(DBModel):
 
     __tablename__ = "weather_cache"
