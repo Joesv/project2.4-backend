@@ -17,7 +17,7 @@ def post_dummy_device():
     # user = app.session.query(User).filter(User.id == get_jwt_identity()).first()
     user_id = get_jwt_identity()
 
-    new_device = DummyDevice(dummy_id=1,
+    new_device = DummyDevice(dummy_type=data['dummy_type'],
                           name=data['name'],
                           user_id=user_id,
                           description=data['description'],

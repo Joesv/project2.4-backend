@@ -78,7 +78,7 @@ class DummyDevice(DBModel):
 
     id = Column(Integer, autoincrement=True, nullable=False, primary_key=True)
     user_id = Column(Integer, ForeignKey('user.id'), nullable=False)
-    dummy_id = Column(Integer, ForeignKey('user.id'), nullable=False)
+    dummy_type = Column(VARCHAR(32), nullable=False)
     name = Column(VARCHAR(32), nullable=False)
     description = Column(VARCHAR(128), nullable=False)
     value = Column(Integer, nullable=True)
@@ -88,7 +88,7 @@ class DummyDevice(DBModel):
         return dict(
             id=self.id,
             user_id=self.user_id,
-            dummy_id=self.dummy_id,
+            dummy_type=self.dummy_type,
             name=self.name,
             description=self.description,
             value=self.value
