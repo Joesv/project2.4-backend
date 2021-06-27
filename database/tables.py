@@ -60,6 +60,7 @@ class WeatherCard(DBModel):
     name = Column(VARCHAR(32))
     lat = Column(Float)
     lon = Column(Float)
+    locationname = Column(VARCHAR(32))
 
     def to_dict(self):
         return dict(
@@ -67,7 +68,8 @@ class WeatherCard(DBModel):
             user_id=self.user_id,
             name=self.name,
             lat=self.lat,
-            lon=self.lon
+            lon=self.lon,
+            locationname=self.locationname
         )
 
 
