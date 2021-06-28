@@ -6,12 +6,14 @@ from app import app
 from app.config import Config
 from database.tables import WeatherCache
 from sqlalchemy import desc
+import threading
 
 
 class Weather:
     apiKey = Config.OPENWEATHERAPIKEY
     baseUrl = 'https://api.openweathermap.org/data/2.5/weather?'
     oneCallBaseUrl = 'https://api.openweathermap.org/data/2.5/onecall?'
+    reverseBaseUrl = 'http://api.openweathermap.org/geo/1.0/reverse?'
     units = 'metric'
 
     def normalize(self, number):
@@ -28,7 +30,7 @@ class Weather:
             WeatherCache.timestamp >= deltaT
         ).order_by(desc(WeatherCache.timestamp)).first()
 
-        if cache is None: # cache doesnt return anything
+        if cache is None:  # cache doesnt return anything
             url = f'{self.oneCallBaseUrl}lat={lat}&lon={lon}&units={self.units}&appid={self.apiKey}'
             resp = requests.get(url)
             json = resp.json()
@@ -40,3 +42,12 @@ class Weather:
             return resp.json()
         # return from cache
         return cache.data
+
+    def get_location(self, lat, lon):
+        limit = 1
+        url = f'{self.reverseBaseUrl}lat={lat}&lon={lon}&limit={limit}&appid={self.apiKey}'
+        resp = requests.get(url)
+        json = resp.json()
+        print(json)
+        location = json[0]['name']
+        return location
