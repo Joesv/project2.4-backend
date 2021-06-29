@@ -64,3 +64,16 @@ def new_weather():
     app.session.commit()
 
     return jsonify(), 201
+
+
+@delete('/weathercard/<int:device_id>')
+def delete_weathercard(device_id):
+    verify_jwt_in_request()
+    card = app.session.query(WeatherCard).filter(WeatherCard.id == device_id).first()
+    user_id = get_jwt_identity()
+    if device_id != user_id:
+        return jsonify(), 301
+
+    app.session.delete(device)
+    app.session.commit()
+    return jsonify(), 200
