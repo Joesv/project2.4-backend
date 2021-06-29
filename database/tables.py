@@ -15,6 +15,7 @@ class User(DBModel):
     created_date = Column(DateTime, default=datetime.datetime.utcnow)
 
     lamp_devices = relationship('LampDevice', backref='user', lazy=True)
+    colored_lamp_devices = relationship('ColoredLampDevice', backref='user', lazy=True)
 
     def to_dict(self):
         return dict(
@@ -24,7 +25,8 @@ class User(DBModel):
             password=self.password,
             created_date=self.created_date,
 
-            lamp_devices=self.lamp_devices
+            lamp_devices=self.lamp_devices,
+            colored_lamp_devices=self.colored_lamp_devices,
         )
 
 
@@ -49,6 +51,32 @@ class LampDevice(DBModel):
             on_url=self.on_url,
             off_url=self.off_url,
             last_status=self.last_status
+        )
+
+
+class ColoredLampDevice(DBModel):
+
+    __tablename__ = "colored_lamp_device"
+
+    id = Column(Integer, autoincrement=True, nullable=False, primary_key=True)
+    user_id = Column(Integer, ForeignKey('user.id'), nullable=False)
+    name = Column(VARCHAR(32), nullable=False)
+    description = Column(VARCHAR(128), nullable=False)
+    update_url = Column(VARCHAR(128), nullable=False)
+    last_red = Column(Float, nullable=False, default=0)
+    last_green = Column(Float, nullable=False, default=0)
+    last_blue = Column(Float, nullable=False, default=0)
+
+    def to_dict(self):
+        return dict(
+            id=self.id,
+            user_id=self.user_id,
+            name=self.name,
+            description=self.description,
+            update_url=self.update_url,
+            last_red=self.last_red,
+            last_green=self.last_green,
+            last_blue=self.last_blue
         )
 
 
