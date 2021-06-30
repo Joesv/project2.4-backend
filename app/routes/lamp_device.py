@@ -62,7 +62,7 @@ def update_lamp_device(device_id):
     device = app.session.query(LampDevice).filter(LampDevice.id == device_id).first()
     user_id = get_jwt_identity()
     if device.user_id != user_id:
-        return jsonify(), 404
+        return jsonify(), 403
 
     data = request.json
     is_on = data['status']
