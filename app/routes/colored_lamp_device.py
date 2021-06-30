@@ -69,9 +69,11 @@ def update_colored_lamp_device(device_id):
 
     # update lamp
     device_update_url = device.update_url \
-        .replace('{red}', str(red)) \
-        .replace('{green}', str(green)) \
-        .replace('{blue}', str(blue))
+        .replace('{red}', str(red / 255)) \
+        .replace('{green}', str(green / 255)) \
+        .replace('{blue}', str(blue / 255))
+
+    print(f'{device_update_url}')
 
     response = requests.get(device_update_url)
     if response.status_code != 200:
