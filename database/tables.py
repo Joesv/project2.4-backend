@@ -1,11 +1,12 @@
-from sqlalchemy import Column, Integer, ForeignKey, VARCHAR, CHAR, BINARY, TIMESTAMP, DateTime, Float, JSON, DECIMAL
-from sqlalchemy.orm import relationship
-from database.db_model import DBModel
 import datetime
+
+from sqlalchemy import Column, Integer, ForeignKey, VARCHAR, CHAR, BINARY, DateTime, Float, JSON
+from sqlalchemy.orm import relationship
+
+from database.db_model import DBModel
 
 
 class User(DBModel):
-
     __tablename__ = "user"
 
     id = Column(Integer, autoincrement=True, nullable=False, primary_key=True)
@@ -31,7 +32,6 @@ class User(DBModel):
 
 
 class LampDevice(DBModel):
-
     __tablename__ = "lamp_device"
 
     id = Column(Integer, autoincrement=True, nullable=False, primary_key=True)
@@ -55,7 +55,6 @@ class LampDevice(DBModel):
 
 
 class ColoredLampDevice(DBModel):
-
     __tablename__ = "colored_lamp_device"
 
     id = Column(Integer, autoincrement=True, nullable=False, primary_key=True)
@@ -102,7 +101,6 @@ class WeatherCard(DBModel):
 
 
 class WeatherCache(DBModel):
-
     __tablename__ = "weather_cache"
 
     id = Column(Integer, autoincrement=True, nullable=False, primary_key=True)
@@ -122,7 +120,6 @@ class WeatherCache(DBModel):
 
 
 class DummyDevice(DBModel):
-
     __tablename__ = "Dummy_Device"
 
     id = Column(Integer, autoincrement=True, nullable=False, primary_key=True)
@@ -131,7 +128,6 @@ class DummyDevice(DBModel):
     name = Column(VARCHAR(32), nullable=False)
     description = Column(VARCHAR(128), nullable=False)
     value = Column(Integer, nullable=True)
-
 
     def to_dict(self):
         return dict(

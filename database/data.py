@@ -1,7 +1,7 @@
 import click
 
 from database.db_model import DBModel
-from database.tables import User#, Game, TopScore, UserGame
+from database.tables import User  # , Game, TopScore, UserGame
 
 
 def user_data(app):
@@ -22,6 +22,7 @@ def user_data(app):
     )
     app.session.flush()
     app.session.commit()
+
 
 '''
 def game_data(app):
@@ -86,6 +87,7 @@ def usergame_data(app):
     app.session.commit()
 '''
 
+
 def setup_db(app, cache):
     try:
         if (app.session.query(User).first() is not None):
@@ -100,7 +102,7 @@ def setup_db(app, cache):
         # create a new database and add new data
         DBModel.metadata.create_all(bind=app.engine)
 
-        #user_data(app)
-        #game_data(app)
-        #topscore_data(app)
-        #usergame_data(app)
+        # user_data(app)
+        # game_data(app)
+        # topscore_data(app)
+        # usergame_data(app)

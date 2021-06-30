@@ -1,12 +1,11 @@
 import datetime
 
 import requests
-import json
+from sqlalchemy import desc
+
 from app import app
 from app.config import Config
 from database.tables import WeatherCache
-from sqlalchemy import desc
-import threading
 
 
 class Weather:

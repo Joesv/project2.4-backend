@@ -1,8 +1,8 @@
-from app.routes.user import user
-from app.routes.lamp_device import lamp_device
 from app.routes.colored_lamp_device import colored_lamp_device
 from app.routes.device import device
 from app.routes.dummy_device import dummy_device
+from app.routes.lamp_device import lamp_device
+from app.routes.user import user
 
 
 def register_blueprints(app):

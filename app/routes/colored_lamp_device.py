@@ -1,10 +1,10 @@
+import requests
 from flask import request, jsonify
 from flask_jwt_extended import verify_jwt_in_request, get_jwt_identity
 
 from app import app
 from app.utils import init_routing_func
 from database.tables import User, ColoredLampDevice
-import requests
 
 colored_lamp_device, get, post, put, delete = init_routing_func('colored_lamp_device', '/api/colored_lamp_device/')
 

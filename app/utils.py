@@ -1,7 +1,9 @@
 from functools import partial
+
 from flask import jsonify
 
 from app.authorization import AuthBlueprint
+
 
 def init_routing_func(name, url_prefix):
     route = AuthBlueprint(name, __name__, url_prefix=url_prefix)
@@ -11,16 +13,16 @@ def init_routing_func(name, url_prefix):
     delete = partial(route.route, methods=["DELETE"])
     return route, get, post, put, delete
 
+
 def check_request_data(data, items):
     message = None
     response_code = 200
     if data is None:
-        message = jsonify({'error':'no json data was detected'})
+        message = jsonify({'error': 'no json data was detected'})
         response_code = 400
     else:
         for item in items:
             if item not in data.keys() or data[item] is None:
-                message =  jsonify({'error':'no ' + item + ' provided'})
+                message = jsonify({'error': 'no ' + item + ' provided'})
                 response_code = 400
     return message, response_code
-
