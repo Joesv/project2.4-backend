@@ -1,3 +1,4 @@
+import requests
 from flask import request, jsonify
 from flask_jwt_extended import verify_jwt_in_request, get_jwt_identity
 
@@ -36,3 +37,36 @@ def get_dummy_devices():
     dummys = app.session.query(DummyDevice).filter(DummyDevice.user_id == user_id).all()
 
     return jsonify(dummys=[d.to_dict() for d in dummys]), 200
+
+@delete('/<int:device_id>')
+def delete_dummy_device(device_id):
+    verify_jwt_in_request()
+
+    device = app.session.query(DummyDevice).filter(DummyDevice.id == device_id).first()
+    user_id = get_jwt_identity()
+    if device.user_id != user_id:
+        return jsonify(), 403
+
+    app.session.delete(device)
+    app.session.commit()
+
+    return jsonify(), 200
+
+@put('/<int:device_id>')
+def update_dummy_device(device_id):
+    verify_jwt_in_request()
+
+    device = app.session.query(DummyDevice).filter(DummyDevice.id == device_id).first()
+    user_id = get_jwt_identity()
+    if device.user_id != user_id:
+        return jsonify(), 403
+
+    data = request.json
+    #is_on = data['status']
+    #print(is_on)
+
+    # update database
+    device.value = data['status']
+    app.session.commit()
+
+    return jsonify(), 200
