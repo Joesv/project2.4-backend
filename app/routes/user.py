@@ -49,7 +49,7 @@ def post_register():
         error = "Username already in use. "
     if email:
         error = "Email already in use."
-    if error is not "":
+    if error != "":
         response = jsonify(error=error), 301
         return response
 
