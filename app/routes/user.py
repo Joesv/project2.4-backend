@@ -2,8 +2,8 @@ import bcrypt
 from flask import request, jsonify
 from flask_jwt_extended import create_access_token
 
-from app.utils import init_routing_func
 from app import app
+from app.utils import init_routing_func
 from database.tables import User
 
 user, get, post, put, delete = init_routing_func('user', '/api/user/')

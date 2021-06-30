@@ -1,7 +1,8 @@
-from os import getenv, path
-from os.path import join, dirname
-from dotenv import load_dotenv
 from datetime import timedelta
+from os import getenv, path
+from os.path import dirname
+
+from dotenv import load_dotenv
 
 
 class Config:
@@ -47,4 +48,5 @@ class Config:
 
     # Openweather api key and wether or not to fetch the data
     OPENWEATHERAPIKEY = getenv('OPENWEATHERMAP_API')
-    ENABLEWEATHERAPI = getenv('ENABLEWEATHERAPI') == 'true'  # we're using expensive API calls, in case autoreload is enabled you might reach your limit
+    ENABLEWEATHERAPI = getenv(
+        'ENABLEWEATHERAPI') == 'true'  # we're using expensive API calls, in case autoreload is enabled you might reach your limit

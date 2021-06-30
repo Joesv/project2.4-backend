@@ -1,11 +1,10 @@
-from app.utils import init_routing_func
-from app.weather import Weather
-from database.tables import WeatherCard
-from app import app
 from flask import jsonify, request
 from flask_jwt_extended import verify_jwt_in_request, get_jwt_identity
 
-import threading
+from app import app
+from app.utils import init_routing_func
+from app.weather import Weather
+from database.tables import WeatherCard
 
 device, get, post, put, delete = init_routing_func('device', '/api/device/')
 

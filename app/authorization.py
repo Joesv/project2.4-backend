@@ -1,6 +1,5 @@
-from pprint import pprint
 import requests
-from flask import Blueprint, Response, request
+from flask import Blueprint, Response
 
 # A list of routes that keeps track which urls are accessible from a local viewpoint. Whether a request is through a
 # local viewpoint is defined by whether or not it is sent by the Main-API, which adds a special header to the request,
@@ -45,7 +44,7 @@ class AuthMiddleWare:
     def __call__(self, environ, start_response):
         # Check if request came from Main API
         public_request = (
-            "HTTP_PUBLIC_REQUEST" in environ or "HTTPS_PUBLIC_REQUEST" in environ
+                "HTTP_PUBLIC_REQUEST" in environ or "HTTPS_PUBLIC_REQUEST" in environ
         )
         if public_request and environ["PATH_INFO"] not in WHITELIST:
             # Send a forbidden response if the route is not on the whitelist
@@ -69,11 +68,10 @@ class AuthMiddleWare:
                 return res(environ, start_response)
             environ["user_id"] = user_id
         if (
-            not public_request
-            and environ["PATH_INFO"] not in UNPROTECTED
-            and "HTTP_AUTH_USER_ID" in environ
+                not public_request
+                and environ["PATH_INFO"] not in UNPROTECTED
+                and "HTTP_AUTH_USER_ID" in environ
         ):
-
             environ["user_id"] = int(environ["HTTP_AUTH_USER_ID"])
 
         return self.__app(environ, start_response)

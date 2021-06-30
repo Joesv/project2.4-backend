@@ -2,6 +2,7 @@ from sqlalchemy.exc import IntegrityError
 
 from app import app
 
+
 def get_objs(object_class, dict=True):
     objs = app.session.query(object_class).all()
     if objs:
@@ -11,6 +12,7 @@ def get_objs(object_class, dict=True):
             return [obj for obj in objs]
     else:
         return []
+
 
 def get_objs_with_filter(object_class, dict=True, *args, **kwargs):
     objs = app.session.query(object_class).filter_by(*args, **kwargs).all()
@@ -22,6 +24,7 @@ def get_objs_with_filter(object_class, dict=True, *args, **kwargs):
     else:
         return []
 
+
 def get_obj_with_filter(object_class, dict=True, *args, **kwargs):
     obj = app.session.query(object_class).filter_by(*args, **kwargs).first()
     if obj:
@@ -31,6 +34,7 @@ def get_obj_with_filter(object_class, dict=True, *args, **kwargs):
             return obj
     else:
         return None
+
 
 def get_obj(object_class, obj_id, dict=True):
     obj = app.session.query(object_class).filter_by(id=obj_id).first()
@@ -42,19 +46,22 @@ def get_obj(object_class, obj_id, dict=True):
     else:
         return None
 
+
 def save_obj(object_class, data, obj_id):
     obj = app.session.query(object_class).get(obj_id)
     fill_object_from_data(obj, data, ['id'])
     app.session.add(obj)
     app.session.commit()
 
+
 def create_obj(object_class, data, object=False):
     if object:
-        obj=data
+        obj = data
     else:
         obj = fill_object_from_data(object_class(), data, ['id'])
     app.session.add(obj)
     app.session.commit()
+
 
 def delete_obj(object_class, obj_id):
     obj = app.session.query(object_class).filter_by(id=obj_id).first()
@@ -66,6 +73,7 @@ def delete_obj(object_class, obj_id):
         except IntegrityError:
             app.session.rollback()
     return False
+
 
 def delete_objs_with_filter(object_class, *args, **kwargs):
     objs = app.session.query(object_class).filter_by(*args, **kwargs).all()
@@ -79,8 +87,9 @@ def delete_objs_with_filter(object_class, *args, **kwargs):
             app.session.rollback()
     return False
 
+
 def fill_object_from_data(obj, data, exclude=[]):
-    attributes = [ attr for attr in data.keys() if attr not in exclude and attr in dir(obj)]
+    attributes = [attr for attr in data.keys() if attr not in exclude and attr in dir(obj)]
     for attribute in attributes:
         setattr(obj, attribute, data[attribute])
     return obj
