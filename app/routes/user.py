@@ -27,9 +27,9 @@ def post_login():
             response.headers.add('Access-Control-Allow-Origin', '*')
             return response, 201
         else:
-            return jsonify(error="password incorrect"), 401
+            return jsonify(error="email or password is incorrect"), 401
     else:
-        return jsonify(error="user does not exist"), 401
+        return jsonify(error="email or password is incorrect"), 401
 
 
 @get('/register')
@@ -44,12 +44,13 @@ def post_register():
     user = app.session.query(User).filter_by(username=data['username']).first()
     email = app.session.query(User).filter_by(email=data['email']).first()
 
-    if user or email:
-        # redirect to signin
-        response = jsonify()
-        response.status_code = 301
-        response.headers['location'] = '/login'
-        response.autocorrect_location_header = False
+    error = ""
+    if user:
+        error = "Username already in use. "
+    if email:
+        error = "Email already in use."
+    if error is not "":
+        response = jsonify(error=error), 301
         return response
 
     new_user = User(email=data['email'],

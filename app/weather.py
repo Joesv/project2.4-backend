@@ -31,6 +31,7 @@ class Weather:
         ).order_by(desc(WeatherCache.timestamp)).first()
 
         if cache is None:  # cache doesnt return anything
+            self.delete_old(lat, lon)
             url = f'{self.oneCallBaseUrl}lat={lat}&lon={lon}&units={self.units}&appid={self.apiKey}'
             resp = requests.get(url)
             json = resp.json()
@@ -51,3 +52,17 @@ class Weather:
         print(json)
         location = json[0]['name']
         return location
+
+    def delete_old(self, lat, lon):
+        deltaT = datetime.datetime.utcnow() - datetime.timedelta(minutes=15)
+        cache = app.session.query(WeatherCache).filter(
+            WeatherCache.lat == lat,
+            WeatherCache.lon == lon,
+            WeatherCache.timestamp < deltaT
+        ).order_by(desc(WeatherCache.timestamp)).first() #find the older one
+        if cache is not None:
+            app.session.delete(cache.id)
+            app.session.flush()
+            app.session.commit()
+
+
