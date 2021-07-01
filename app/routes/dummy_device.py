@@ -21,7 +21,7 @@ def post_dummy_device():
                              name=data['name'],
                              user_id=user_id,
                              description=data['description'],
-                             value=1)
+                             value=0)
     app.session.add(new_device)
     app.session.flush()
     app.session.commit()
