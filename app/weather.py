@@ -60,7 +60,7 @@ class Weather:
             WeatherCache.timestamp < deltaT
         ).order_by(desc(WeatherCache.timestamp)).first() #find the older one
         if cache is not None:
-            app.session.delete(cache.id)
+            app.session.delete(cache)
             app.session.flush()
             app.session.commit()
 
