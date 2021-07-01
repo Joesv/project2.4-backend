@@ -7,7 +7,7 @@ from database.db_model import DBModel
 
 
 def create_engine_and_session(app):
-    app.engine = create_engine(app.config["SQLALCHEMY_DATABASE_URI"])
+    app.engine = create_engine(app.config["SQLALCHEMY_DATABASE_URI"], pool_size=50, max_overflow=100)
 
     app.session = scoped_session(
         sessionmaker(
